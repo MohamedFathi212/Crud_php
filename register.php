@@ -1,11 +1,23 @@
-<?php
+<?php 
+if(isset($_POST['add'])){
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
 
-$id = $_GET['id'];
+    $con = mysqli_connect("localhost", "root", "", "crud_php");
 
-$con = mysqli_connect("localhost", "root", "", "crud_php");
+    $query = "INSERT INTO `student` (`name`, `email`, `password`) VALUES ('$name', '$email', '$password')";
 
-$query = mysqli_query($con, "SELECT * FROM student WHERE id='$id'");
-$row = mysqli_fetch_assoc($query);
+    $result = mysqli_query($con, $query);
+
+    if($result){
+        echo "Student has been inserted.";
+        sleep(1);
+        header("location:login.php");
+    } else {
+        echo "Student has not been inserted.";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -14,7 +26,7 @@ $row = mysqli_fetch_assoc($query);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/stylee.css">
-    <title>Update Student</title>
+    <title>Register Page</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -39,7 +51,7 @@ $row = mysqli_fetch_assoc($query);
             text-align: center;
             color: #333;
         }
-        input[type="text"], input[type="password"] {
+        input[type="text"], input[type="email"], input[type="password"] {
             width: 100%;
             padding: 0.75rem;
             margin-bottom: 1rem;
@@ -63,13 +75,12 @@ $row = mysqli_fetch_assoc($query);
     </style>
 </head>
 <body>
-    <form action="update_student.php" method="post">
-        <input type="hidden" name="id" value="<?php echo htmlspecialchars($id); ?>">
-        <h2>Update Student</h2>
-        <input type="text" name="name" value="<?php echo htmlspecialchars($row['name']); ?>" placeholder="Enter your name">
-        <input type="text" name="email" value="<?php echo htmlspecialchars($row['email']); ?>" placeholder="Enter your email">
-        <input type="password" name="password" value="<?php echo htmlspecialchars($row['password']); ?>" placeholder="Enter your password">
-        <input type="submit" name="update" value="Update Student">
+    <form action="" method="post"> 
+        <h2>Add Student</h2>
+        <input type="text" name="name" placeholder="Enter your Name" required>
+        <input type="email" name="email" placeholder="Enter your Email" required>
+        <input type="password" name="password" placeholder="Enter your Password" required>
+        <input type="submit" name="add" value="Add Student">
     </form>
 </body>
 </html>
